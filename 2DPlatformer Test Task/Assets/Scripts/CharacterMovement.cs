@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
@@ -10,7 +11,10 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private float airSpeedScale;
     [SerializeField] private float jumpHeight;
 
-    [FormerlySerializedAs("characterGroundDetection")] [SerializeField] private CollisionDetection groundDetection;
+    [SerializeField] private CollisionDetection groundDetection;
+    [SerializeField] private CollisionDetection lootDetection;
+
+    [SerializeField] private TextMeshProUGUI lootingTipWidget;
     
     [SerializeField] private string isRunningAnimatorParameterName;
     [SerializeField] private string verticalDirectionAnimatorParameterName;
@@ -24,17 +28,28 @@ public class CharacterMovement : MonoBehaviour
     private bool secondJumpAllowed = true;
     private bool isInAir;
 
+    private Item nearestItem = null;
+
     void Start()
     {
         characterAnimator = transform.GetComponent<Animator>();
         characterRigidbody2D = transform.GetComponent<Rigidbody2D>();
 
-        groundDetection.OnCollisionChanged += (bool newValue, GameObject other) =>
+        groundDetection.OnCollisionChanged += (newValue, other) =>
         {
             isInAir = !newValue;
             if (!isInAir)
             {
                 secondJumpAllowed = true;
+            }
+        };
+        lootDetection.OnCollisionChanged += (newValue, other) =>
+        {
+            var item = other.transform.GetComponentInParent<Item>();
+            nearestItem = item;
+            if (item != null)
+            {
+                lootingTipWidget.gameObject.SetActive(newValue);
             }
         };
     }
@@ -67,6 +82,15 @@ public class CharacterMovement : MonoBehaviour
             }
 
             characterRigidbody2D.velocity += Vector2.up * jumpHeight;
+        }
+    }
+    
+    public void OnLoot(InputValue value)
+    {
+        if (value.isPressed && (nearestItem != null))
+        {
+            ItemContent content = nearestItem.LootItem();
+            lootingTipWidget.gameObject.SetActive(false);
         }
     }
 }
