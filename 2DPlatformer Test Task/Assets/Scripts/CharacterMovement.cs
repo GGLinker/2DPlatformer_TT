@@ -10,7 +10,7 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private float airSpeedScale;
     [SerializeField] private float jumpHeight;
 
-    [FormerlySerializedAs("characterGroundDetection")] [SerializeField] private GroundDetection groundDetection;
+    [FormerlySerializedAs("characterGroundDetection")] [SerializeField] private CollisionDetection groundDetection;
     
     [SerializeField] private string isRunningAnimatorParameterName;
     [SerializeField] private string verticalDirectionAnimatorParameterName;
@@ -29,7 +29,7 @@ public class CharacterMovement : MonoBehaviour
         characterAnimator = transform.GetComponent<Animator>();
         characterRigidbody2D = transform.GetComponent<Rigidbody2D>();
 
-        groundDetection.OnGroundCollisionChanged += (bool newValue, GameObject other) =>
+        groundDetection.OnCollisionChanged += (bool newValue, GameObject other) =>
         {
             isInAir = !newValue;
             if (!isInAir)
