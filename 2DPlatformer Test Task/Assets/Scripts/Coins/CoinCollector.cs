@@ -11,7 +11,6 @@ public class CoinCollector : MonoBehaviour
     public void CollectCoins(int amount)
     {
         coinAmount += amount;
-        Debug.Log(amount + " " + coinAmount);
         coinsCountWidget.SetText(coinAmount.ToString());
     }
 }

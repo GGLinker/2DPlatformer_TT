@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 7324480757921012514}
   m_Layer: 0
   m_Name: Character
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -321,3 +321,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 080edab1f83a5e4489a69bbc944b14f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  coinsCountWidget: {fileID: 0}

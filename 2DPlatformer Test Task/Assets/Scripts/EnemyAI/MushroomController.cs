@@ -70,8 +70,9 @@ public class MushroomController : EnemyControllerBase
     private IEnumerator OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.CompareTag("Player") &&
-            col.contacts[0].point.y > transform.position.y &&
-            Mathf.Abs(col.contacts[0].point.x - transform.position.x) <= collider.size.x * 1.5f)
+            !col.collider.isTrigger &&
+            col.gameObject.transform.position.y > transform.position.y &&
+            Mathf.Abs(col.gameObject.transform.position.x - transform.position.x) <= collider.size.x * 2f)
         {
             //death
             movementVector = Vector2.zero;
