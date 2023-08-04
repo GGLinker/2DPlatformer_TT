@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
@@ -18,10 +19,20 @@ public class Item : MonoBehaviour
         animator = transform.GetComponent<Animator>();
     }
 
-    public ItemContent LootItem()
+    public ItemContent GetContent()
+    {
+        return itemContent;
+    }
+    public void LootItem()
+    {
+        StartCoroutine(Loot());
+    }
+
+    private IEnumerator Loot()
     {
         animator.SetBool(lootedAnimatorParameterName, true);
-        return itemContent;
+        yield return new WaitForSeconds(3f);
+        Destroy(gameObject);
     }
 }
 

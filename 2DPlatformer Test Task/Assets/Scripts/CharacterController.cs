@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 
 [RequireComponent(typeof(Animator), typeof(Rigidbody2D))]
-public class CharacterMovement : MonoBehaviour
+public class CharacterController : MonoBehaviour
 {
     [SerializeField] private float movementSpeed;
     [SerializeField] private float airSpeedScale;
@@ -15,6 +15,7 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private CollisionDetection lootDetection;
 
     [SerializeField] private TextMeshProUGUI lootingTipWidget;
+    [SerializeField] private InventoryWidget inventoryWidget;
     
     [SerializeField] private string isRunningAnimatorParameterName;
     [SerializeField] private string verticalDirectionAnimatorParameterName;
@@ -46,9 +47,9 @@ public class CharacterMovement : MonoBehaviour
         lootDetection.OnCollisionChanged += (newValue, other) =>
         {
             var item = other.transform.GetComponentInParent<Item>();
-            nearestItem = item;
             if (item != null)
             {
+                nearestItem = newValue ? item : null;
                 lootingTipWidget.gameObject.SetActive(newValue);
             }
         };
@@ -87,10 +88,14 @@ public class CharacterMovement : MonoBehaviour
     
     public void OnLoot(InputValue value)
     {
-        if (value.isPressed && (nearestItem != null))
+        if (nearestItem != null)
         {
-            ItemContent content = nearestItem.LootItem();
+            ItemContent content = nearestItem.GetContent();
             lootingTipWidget.gameObject.SetActive(false);
+            if (inventoryWidget.UpdateSlotContent(content))
+            {
+                nearestItem.LootItem();
+            };
         }
     }
 }
