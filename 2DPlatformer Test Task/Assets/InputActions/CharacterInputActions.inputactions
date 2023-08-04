@@ -1,0 +1,65 @@
+{
+    "name": "CharacterInputActions",
+    "maps": [
+        {
+            "name": "Player",
+            "id": "21048845-b043-4ccf-b638-1a4059387eb9",
+            "actions": [
+                {
+                    "name": "Movement",
+                    "type": "Button",
+                    "id": "7d0aa020-cf2c-4f39-b09c-d2aab48bc1e3",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Jump",
+                    "type": "Button",
+                    "id": "5f1c50ce-5363-48bb-825f-2f0fdee93085",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "fec32d88-2df5-4033-bdda-60028c042f39",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e882fb4d-582b-4360-a4f0-ed5abf1984bd",
+                    "path": "<Keyboard>/a",
+                    "interactions": "Press(pressPoint=0.1)",
+                    "processors": "Invert",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8b0c2d33-2754-4876-b3c0-6435cda4830c",
+                    "path": "<Keyboard>/d",
+                    "interactions": "Press(pressPoint=0.1)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

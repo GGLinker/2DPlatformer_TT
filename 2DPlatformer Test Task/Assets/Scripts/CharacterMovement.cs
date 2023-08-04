@@ -1,0 +1,65 @@
+using System;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+[RequireComponent(typeof(Animator), typeof(Rigidbody2D))]
+public class CharacterMovement : MonoBehaviour
+{
+    [SerializeField] private float movementSpeed;
+    [SerializeField] private float airSpeedScale;
+    [SerializeField] private float jumpHeight;
+
+    [SerializeField] private CharacterGroundDetection characterGroundDetection;
+    
+    [SerializeField] private string isRunningAnimatorParameterName;
+    [SerializeField] private string verticalDirectionAnimatorParameterName;
+
+    private Animator characterAnimator;
+    private Rigidbody2D characterRigidbody2D;
+
+    private readonly float velocityDetectionThreshold = 0.05f;
+    
+    private float horizontalVelocity;
+    private bool secondJumpAllowed = true;
+    private bool isInAir;
+
+    void Start()
+    {
+        characterAnimator = transform.GetComponent<Animator>();
+        characterRigidbody2D = transform.GetComponent<Rigidbody2D>();
+
+        characterGroundDetection.OnGroundCollisionChanged += (bool newValue) =>
+        {
+            isInAir = !newValue;
+            if (!isInAir)
+            {
+                secondJumpAllowed = true;
+            }
+        };
+    }
+
+    private void Update()
+    {
+        horizontalVelocity = Input.GetAxisRaw("Horizontal");
+    }
+
+    private void FixedUpdate()
+    {
+        var velocity = characterRigidbody2D.velocity = new Vector2(horizontalVelocity * (isInAir ? movementSpeed * airSpeedScale : movementSpeed), characterRigidbody2D.velocity.y);
+        characterAnimator.SetBool(isRunningAnimatorParameterName, Mathf.Abs(velocity.x) > velocityDetectionThreshold);
+        characterAnimator.SetFloat(verticalDirectionAnimatorParameterName, Mathf.Abs(velocity.y) < velocityDetectionThreshold ? 0 : (velocity.y > 0 ? 1 : -1));
+    }
+
+    public void OnJump(InputValue value)
+    {
+        if (value.isPressed && (!isInAir || secondJumpAllowed))
+        {
+            if (isInAir)
+            {
+                secondJumpAllowed = false;
+            }
+            //characterAnimator.Play("CharacterJump");
+            characterRigidbody2D.AddForce(Vector2.up * jumpHeight, ForceMode2D.Impulse);
+        }
+    }
+}
