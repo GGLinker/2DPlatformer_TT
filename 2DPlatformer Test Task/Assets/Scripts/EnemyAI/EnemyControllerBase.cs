@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EnemyControllerBase : MonoBehaviour
 {
@@ -7,10 +9,14 @@ public class EnemyControllerBase : MonoBehaviour
     [SerializeField] private CollisionDetection precipiceDetector;
     [SerializeField] private CollisionDetection obstacleDetector;
 
+    [SerializeField] private Animator GameOverAnimator;
+    private static readonly int GameOverParameterName = Animator.StringToHash("bGameOver");
+    
     protected Animator enemyAnimator;
     protected Rigidbody2D rigidbodyComponent;
 
     private Vector2 _movementVector;
+
     protected Vector2 movementVector
     {
         get => _movementVector;
@@ -55,5 +61,18 @@ public class EnemyControllerBase : MonoBehaviour
             transform.localScale.y, 
             transform.localScale.z
         );
+    }
+    
+    protected virtual IEnumerator OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.CompareTag("Player") &&
+            !col.collider.isTrigger)
+        {
+            GameOverAnimator.gameObject.SetActive(true);
+            GameOverAnimator.SetBool(GameOverParameterName, true);
+            yield return new WaitForSecondsRealtime(4f);
+
+            SceneManager.LoadScene(0);
+        }
     }
 }

@@ -69,7 +69,7 @@ public class MushroomController : EnemyControllerBase
         yield return new WaitForSeconds(1f);
     }
 
-    private IEnumerator OnCollisionEnter2D(Collision2D col)
+    protected override IEnumerator OnCollisionEnter2D(Collision2D col)
     {
         if (!destroying &&
             col.gameObject.CompareTag("Player") &&
@@ -84,6 +84,8 @@ public class MushroomController : EnemyControllerBase
             yield return new WaitForSeconds(deathAnimationClip.length);
             
             Destroy(gameObject);
+            yield break;
         }
+        yield return base.OnCollisionEnter2D(col);
     }
 }
