@@ -33,7 +33,7 @@ public class EnemyControllerBase : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rigidbodyComponent.velocity = movementVector * movementSpeed;
+        rigidbodyComponent.velocity = new Vector2(movementVector.x * movementSpeed, rigidbodyComponent.velocity.y);
     }
 
     protected virtual void DetectPrecipice(bool groundDetected, GameObject other)

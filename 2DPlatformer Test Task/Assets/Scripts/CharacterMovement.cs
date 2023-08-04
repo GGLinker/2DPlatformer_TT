@@ -65,7 +65,8 @@ public class CharacterMovement : MonoBehaviour
             {
                 secondJumpAllowed = false;
             }
-            characterRigidbody2D.AddForce(Vector2.up * jumpHeight, ForceMode2D.Impulse);
+
+            characterRigidbody2D.velocity += Vector2.up * jumpHeight;
         }
     }
 }

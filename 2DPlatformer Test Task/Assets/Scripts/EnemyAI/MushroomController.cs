@@ -16,6 +16,8 @@ public class MushroomController : EnemyControllerBase
     private Transform playerAsTarget;
     private Coroutine chaseCoroutineHandler;
 
+    private bool destroying;
+
     protected override void Start()
     {
         base.Start();
@@ -64,16 +66,18 @@ public class MushroomController : EnemyControllerBase
     private IEnumerator UpdateMovementVector()
     {
         movementVector = (transform.position.x - playerAsTarget.position.x) > 0 ? Vector2.left : Vector2.right;
-        yield return null;
+        yield return new WaitForSeconds(1f);
     }
 
     private IEnumerator OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.CompareTag("Player") &&
+        if (!destroying &&
+            col.gameObject.CompareTag("Player") &&
             !col.collider.isTrigger &&
             col.gameObject.transform.position.y > transform.position.y &&
             Mathf.Abs(col.gameObject.transform.position.x - transform.position.x) <= collider.size.x * 2f)
         {
+            destroying = true;
             //death
             movementVector = Vector2.zero;
             enemyAnimator.SetBool(IsDeathAnimatorParameterName, true);
