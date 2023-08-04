@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1072661561559324613}
   m_Layer: 0
   m_Name: GroundDetector
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -243,7 +243,7 @@ MonoBehaviour:
   movementSpeed: 8
   airSpeedScale: 0.7
   jumpHeight: 20
-  characterGroundDetection: {fileID: 8140515420077952931}
+  groundDetection: {fileID: 8140515420077952931}
   isRunningAnimatorParameterName: bRunning
   verticalDirectionAnimatorParameterName: YDirection
 --- !u!114 &1333717746624803188

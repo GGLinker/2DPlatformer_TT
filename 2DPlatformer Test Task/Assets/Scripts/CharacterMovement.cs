@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 [RequireComponent(typeof(Animator), typeof(Rigidbody2D))]
 public class CharacterMovement : MonoBehaviour
@@ -9,7 +10,7 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private float airSpeedScale;
     [SerializeField] private float jumpHeight;
 
-    [SerializeField] private CharacterGroundDetection characterGroundDetection;
+    [FormerlySerializedAs("characterGroundDetection")] [SerializeField] private GroundDetection groundDetection;
     
     [SerializeField] private string isRunningAnimatorParameterName;
     [SerializeField] private string verticalDirectionAnimatorParameterName;
@@ -28,7 +29,7 @@ public class CharacterMovement : MonoBehaviour
         characterAnimator = transform.GetComponent<Animator>();
         characterRigidbody2D = transform.GetComponent<Rigidbody2D>();
 
-        characterGroundDetection.OnGroundCollisionChanged += (bool newValue) =>
+        groundDetection.OnGroundCollisionChanged += (bool newValue, GameObject other) =>
         {
             isInAir = !newValue;
             if (!isInAir)
@@ -41,6 +42,12 @@ public class CharacterMovement : MonoBehaviour
     private void Update()
     {
         horizontalVelocity = Input.GetAxisRaw("Horizontal");
+        transform.localScale = new Vector3(
+            horizontalVelocity == 0 ? 
+                transform.localScale.x : 
+                Mathf.Abs(transform.localScale.x) * (horizontalVelocity >= 0 ? 1 : -1),
+            transform.localScale.y,
+            transform.localScale.z);
     }
 
     private void FixedUpdate()
